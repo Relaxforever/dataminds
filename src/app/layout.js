@@ -1,6 +1,8 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Link from 'next/link'
+import Image from 'next/image'
+import dataminds from '../../public/dataminds.png'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,8 +16,16 @@ export default function RootLayout({ children }) {
     <html>
       <body className={inter.className}>
       <div className="flex flex-col min-h-screen">
-      <header className="p-4 bg-blue-500 text-white flex justify-between items-center">
-        <div className="text-xl font-bold">Ares by Dataminds</div>
+      <header className="p-4 bg-data-minds-blue text-white flex justify-between items-center">
+      <Link href="/">
+
+      <Image 
+        src={dataminds}
+        alt="Ares by Dataminds Logo" 
+        width={60}
+        height={20}
+      />
+  </Link>
         <nav>
           <ul className="flex space-x-4">
             <li>
@@ -31,8 +41,27 @@ export default function RootLayout({ children }) {
         </nav>
       </header>
       {children}
+      <footer className="p-4 bg-data-minds-blue text-white text-center">
+  <div className="container mx-auto">
+    <div className="mb-4">
+      <h2 className="text-xl font-bold mb-2">Ares by Dataminds</h2>
+      <p className="text-sm">
+        A platform to search and explore videos across the web. Discover, learn, and dive into a world of visual content tailored to your interests. Our mission is to organize the world's video content and make it easily accessible.
+      </p>
     </div>
-    </body>
+    <div>
+  <p className="text-sm">
+    © 2023 Dataminds. All Rights Reserved. | <a href="/terms" className="text-blue-400 hover:text-blue-300">Terms of Service</a> | <a href="/privacy" className="text-blue-400 hover:text-blue-300">Privacy Policy</a>
+  </p>
+  <p className="text-sm mt-2">
+    <a href="https://github.com/Relaxforever" className="text-blue-400 hover:text-blue-300">GitHub Repository</a> | Contact: <a href="mailto:support@dataminds.com" className="text-blue-400 hover:text-blue-300">support@dataminds.com</a>
+  </p>
+</div>
+
+  </div>
+  </footer>
+    </div>
+      </body>
     </html>
   )
 }

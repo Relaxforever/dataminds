@@ -36,6 +36,33 @@ export default function Search() {
      
   }, []);
 
+
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-2xl p-4 bg-white rounded shadow-lg">
+        {error && <div className="text-red-500 p-2">{error}</div>} 
+        {results.length > 0 && results.map((result, index) => (
+          <div key={index} className="border-b p-2">
+            <div className="relative border p-4 rounded-lg">
+              <iframe 
+                className="w-full h-64 rounded" 
+                src={result.url.replace('watch?v=', 'embed/')} 
+                title={result.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen>
+              </iframe>
+              <div className="absolute top-0 left-0 p-2 bg-white bg-opacity-75">
+                <div className="text-xl font-bold">{result.title}</div>
+                <div className="text-gray-700">{result.views} views</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-2xl p-4 bg-white rounded shadow-lg">

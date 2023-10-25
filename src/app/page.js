@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'; // fixed the import from 'next/navigation' to 'next/router'
 
+
+
 export default function Home() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]); // state to store the results
@@ -42,7 +44,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+ <h1 className="text-5xl font-extrabold mb-4 text-blue-500">Video Search with Ares</h1>
+    <p className="text-lg mb-4 text-gray-700 max-w-lg text-center">
+      Enter a keyword to search for relevant video content. Our AI, powered by Whisper, will analyze the transcripts and provide the precise moments where the keyword is mentioned.
+    </p>
       <div className="flex items-center p-4 bg-white rounded shadow-lg">
+        
         <input 
           type="text" 
           value={query} 
