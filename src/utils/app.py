@@ -6,8 +6,10 @@ from pytube import YouTube
 import whisper
 from sentence_transformers import SentenceTransformer, util
 import chromadb
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})  # Configure CORS for all routes
 
 # Initialization
 model = whisper.load_model("base")
@@ -80,7 +82,7 @@ def process_transcriptions():
         collection.add(
             ids=batch['id_database'].tolist(),
             embeddings=batch['embeddings'].tolist(),
-            metadatas=batch[['start', 'end', 'text', 'views', 'publish_date', 'url']].to_dict('records')
+            metadatas=batch[['start', 'end', 'text', 'views', 'publish_date', 'url', 'title']].to_dict('records')
         )
 
     return jsonify({"message": "Transcriptions processed and embeddings generated.", "data": df_overlap.to_dict(orient='records')})

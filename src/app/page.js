@@ -1,5 +1,6 @@
+"use client"
 import { useState } from 'react';
-import { useRouter } from 'next/router'; // fixed the import from 'next/navigation' to 'next/router'
+import { useRouter } from 'next/navigation'; // fixed the import from 'next/navigation' to 'next/router'
 
 export default function Home() {
   const [query, setQuery] = useState('');
@@ -30,6 +31,7 @@ export default function Home() {
     }
 
     // If you still want to navigate to a new page after getting the results:
+    //console.log("Resultados: ", results)
     router.push(`/search?q=${query}`);
   };
 
@@ -39,7 +41,8 @@ export default function Home() {
         <input 
           type="text" 
           value={query} 
-          onChange={(e) => setQuery(e.target.value)} 
+          onChange={(e) => { console.log('Input Change:', e.target.value);
+          setQuery(e.target.value);}} 
           className="w-full p-2 border rounded-l-lg focus:outline-none"
         />
         <button 
@@ -51,11 +54,7 @@ export default function Home() {
       </div>
       {/* Display results (just as an example) */}
       <div>
-        {results.map((result, index) => (
-          <div key={index}>
-            {result.title} // Display title or any other property from the result
-          </div>
-        ))}
+
       </div>
     </div>
   );

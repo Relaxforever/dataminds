@@ -1,5 +1,6 @@
+'use client'
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export default function Search() {
   const [results, setResults] = useState([]);
@@ -20,6 +21,7 @@ export default function Search() {
           });
 
           const data = await response.json();
+          console.log(data)
           setResults(data);
 
         } catch (error) {
