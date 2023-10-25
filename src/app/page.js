@@ -1,13 +1,35 @@
-'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from 'next/router'; // fixed the import from 'next/navigation' to 'next/router'
 
 export default function Home() {
   const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]); // state to store the results
   const router = useRouter();
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
+    // Fetch results from Flask API
+    try {
+      const response = await fetch("http://localhost:5000/query_database", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            query_texts: query,  // pass the query to the backend
+        }),
+      });
+      
+      const data = await response.json();
+
+      if (data) {
+        setResults(data); // store the results
+        // You can also navigate to a new page or display the results on the same page.
+      }
+    } catch (error) {
+      console.error("Error querying the database:", error);
+    }
+
+    // If you still want to navigate to a new page after getting the results:
     router.push(`/search?q=${query}`);
   };
 
@@ -27,9 +49,18 @@ export default function Home() {
           Search
         </button>
       </div>
+      {/* Display results (just as an example) */}
+      <div>
+        {results.map((result, index) => (
+          <div key={index}>
+            {result.title} // Display title or any other property from the result
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
+
 
 /* Check Home for Later
 
