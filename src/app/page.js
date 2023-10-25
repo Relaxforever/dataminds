@@ -32,7 +32,12 @@ export default function Home() {
 
     // If you still want to navigate to a new page after getting the results:
     //console.log("Resultados: ", results)
-    router.push(`/search?q=${query}`);
+
+    router.push(`/search/?q=${query}`)
+
+    
+    // This will redirect to /search?q=query
+    // results into currentPath?page=1&skip=10
   };
 
   return (
