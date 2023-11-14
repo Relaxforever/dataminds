@@ -1,6 +1,7 @@
 export default function About() {
     return (
       <div>
+        
 
         <div className="container mx-auto p-8">
         <h1 className="text-4xl font-bold mb-6 text-center">Acerca de Nosotros</h1>

@@ -1,15 +1,24 @@
-// Assuming you have a function getVideoDetails that fetches details from your API
+// pages/VideoDetails.js
 import { useRouter } from 'next/router';
 
-export default function Video() {
+export default function VideoDetails() {
   const router = useRouter();
-  const { id } = router.query;
-
-  // Fetch video details based on 'id' from the API
+  const { title, url, views } = router.query;
 
   return (
-    <div>
-      {/* Render video details here */}
+    <div className="container">
+      <iframe 
+        className="w-full h-96"
+        src={url}
+        title={title}
+        frameBorder="0"
+        allowFullScreen>
+      </iframe>
+      <div>
+        <h1>{title}</h1>
+        <p>{views} views</p>
+        {/* Add more information as needed */}
+      </div>
     </div>
   );
 }

@@ -46,7 +46,7 @@ export default function Search() {
           <div key={index} className="border-b p-2">
             <div className="relative border p-4 rounded-lg">
               <iframe 
-                className="w-full h-64 rounded" 
+                className="w-full h-96 rounded" 
                 src={result.url.replace('watch?v=', 'embed/')} 
                 title={result.title}
                 frameBorder="0"
