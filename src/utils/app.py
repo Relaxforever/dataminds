@@ -1,21 +1,27 @@
 from flask import Flask, request, jsonify
-import gdown
 import pandas as pd
-from tqdm import tqdm
 from pytube import YouTube
 import whisper
-from sentence_transformers import SentenceTransformer, util
+from sentence_transformers import SentenceTransformer
 import chromadb
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})  # Configure CORS for all routes
 
-# Initialization
+client = chromadb.PersistentClient(path="embeddingsdb")
+
+collection_name = 'pycon'
+try:
+    collection = client.get_collection(collection_name)
+except ValueError:
+    # Collection does not exist, so create it
+    collection = client.create_collection(collection_name)
+
+
+
 model = whisper.load_model("base")
 sentence_model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
-client = chromadb.Client()
-collection = client.create_collection('pycon')
 MAX_BATCH_SIZE = 166
 
 @app.route('/')
@@ -45,8 +51,9 @@ def transcribe_audio():
 @app.route('/process_transcriptions', methods=['GET'])
 def process_transcriptions():
     # Read the CSV file directly from the local directory
+    import os
+    print(f"Current working directory: {os.getcwd()}")
     df_transcribes = pd.read_csv('all_transcribes.csv', sep='|')
-
     # Process transcriptions and create overlapping windows
     new_data = []
     window = 6
