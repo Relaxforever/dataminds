@@ -51,8 +51,7 @@ def transcribe_audio():
 @app.route('/process_transcriptions', methods=['GET'])
 def process_transcriptions():
     # Read the CSV file directly from the local directory
-    import os
-    print(f"Current working directory: {os.getcwd()}")
+   
     df_transcribes = pd.read_csv('all_transcribes.csv', sep='|')
     # Process transcriptions and create overlapping windows
     new_data = []
