@@ -1,27 +1,19 @@
 from flask import Flask, request, jsonify
+import gdown
 import pandas as pd
+from tqdm import tqdm
 from pytube import YouTube
 import whisper
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, util
 import chromadb
-from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # Configure CORS for all routes
 
-client = chromadb.PersistentClient(path="embeddingsdb")
-
-collection_name = 'pycon'
-try:
-    collection = client.get_collection(collection_name)
-except ValueError:
-    # Collection does not exist, so create it
-    collection = client.create_collection(collection_name)
-
-
-
+# Initialization
 model = whisper.load_model("base")
 sentence_model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+client = chromadb.Client()
+collection = client.create_collection('pycon')
 MAX_BATCH_SIZE = 166
 
 @app.route('/')
@@ -51,8 +43,8 @@ def transcribe_audio():
 @app.route('/process_transcriptions', methods=['GET'])
 def process_transcriptions():
     # Read the CSV file directly from the local directory
-   
     df_transcribes = pd.read_csv('all_transcribes.csv', sep='|')
+
     # Process transcriptions and create overlapping windows
     new_data = []
     window = 6
@@ -82,13 +74,13 @@ def process_transcriptions():
     df_overlap['embeddings'] = embeddings.tolist()
 
     df_overlap['id_database'] = df_overlap.apply(lambda x : str(hash(x['title']))+ '-'+ str(x['id']), axis=1)
-    
+
     for i in range(0, len(df_overlap), MAX_BATCH_SIZE):
         batch = df_overlap.iloc[i:i+MAX_BATCH_SIZE]
         collection.add(
             ids=batch['id_database'].tolist(),
             embeddings=batch['embeddings'].tolist(),
-            metadatas=batch[['start', 'end', 'text', 'views', 'publish_date', 'url', 'title']].to_dict('records')
+            metadatas=batch[['start', 'end', 'text', 'views', 'publish_date', 'url']].to_dict('records')
         )
 
     return jsonify({"message": "Transcriptions processed and embeddings generated.", "data": df_overlap.to_dict(orient='records')})
