@@ -1,12 +1,13 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 export default function Search() {
   const [results, setResults] = useState([]);
   const searchParams = useSearchParams()
   const [error, setError] = useState(null);  // Error state
-
+  const router = useRouter();
   useEffect(() => {
       const fetchResults = async () => {
         try {
@@ -23,6 +24,7 @@ export default function Search() {
           const data = await response.json();
           setResults(data.metadatas[0]);
           console.log( data.metadatas[0].map((result, index) => (result)))
+          console.log(data)
           const search = searchParams.get('q')
           console.log(search)
 
@@ -37,13 +39,19 @@ export default function Search() {
   }, []);
 
 
+  const handleVideoClick = (videoData) => {
+    localStorage.setItem('currentVideo', JSON.stringify(videoData));
+    localStorage.setItem('allvideosRecommended' , JSON.stringify(results));
+    router.push(`/video/?videoId=${videoData.views}`);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-2xl p-4 bg-white rounded shadow-lg">
         {error && <div className="text-red-500 p-2">{error}</div>} 
         {results.length > 0 && results.map((result, index) => (
-          <div key={index} className="border-b p-2">
+          
+          <div key={index} className="border-b p-2" onClick={() => handleVideoClick(result)}>
             <div className="relative border p-4 rounded-lg">
               <iframe 
                 className="w-full h-96 rounded" 
